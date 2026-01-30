@@ -1,0 +1,49 @@
+@startuml
+skinparam linetype ortho
+skinparam rectangle {
+    BackgroundColor White
+    BorderColor Black
+    Shadowing false
+}
+
+' Define Nodes
+rectangle "Input\n(224x224x3)" as Input
+rectangle "Initial Conv" as InitConv
+rectangle "Dense Block 1\n(6 Layers)" as DB1
+rectangle "Transition 1" as TL1
+
+rectangle "Dense Block 2\n(12 Layers)" as DB2
+rectangle "Transition 2" as TL2
+rectangle "Dense Block 3\n(24 Layers)" as DB3
+rectangle "Transition 3" as TL3
+
+rectangle "Dense Block 4\n(16 Layers)" as DB4
+rectangle "Classification Head" as Head {
+    rectangle "Global Avg Pool" as GAP
+    rectangle "Dropout\n(0.5)" as Drop
+    rectangle "Output\n(Sigmoid)" as Out
+    GAP -right-> Drop
+    Drop -right-> Out
+}
+
+' Layout Logic: Snake (Mengular)
+' Row 1: Left to Right
+Input -right-> InitConv
+InitConv -right-> DB1
+DB1 -right-> TL1
+
+' Row 1 -> Row 2 (Down)
+TL1 -down-> DB2
+
+' Row 2: Right to Left
+DB2 -left-> TL2
+TL2 -left-> DB3
+DB3 -left-> TL3
+
+' Row 2 -> Row 3 (Down)
+TL3 -down-> DB4
+
+' Row 3: Left to Right
+DB4 -right-> GAP
+
+@enduml

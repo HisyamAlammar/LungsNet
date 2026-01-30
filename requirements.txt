@@ -1,0 +1,12 @@
+tensorflow[and-cuda]
+streamlit
+opencv-python-headless
+matplotlib
+seaborn
+numpy
+pandas
+scikit-learn
+jupyter
+pillow
+kaggle
+kagglehub

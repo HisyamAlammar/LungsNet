@@ -1,0 +1,32 @@
+@startuml
+skinparam activity {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+    FontName Times New Roman
+    FontSize 14
+}
+
+start
+
+:<b>Akuisisi Dataset X-Ray</b>;
+
+:<b>Data Preprocessing & Augmentasi</b>;
+
+:<b>Inisialisasi Model DenseNet121</b>\n(Transfer Learning);
+
+:<b>Pelatihan Model (Training)</b>;
+
+:<b>Evaluasi Performa Model</b>\n(Akurasi, Recall, ROC-AUC);
+
+if (Performa Optimal?) then (Ya)
+    :<b>Visualisasi Grad-CAM</b>\n(Explainable AI);
+    
+    :<b>Analisis & Kesimpulan</b>;
+else (Tidak)
+    :<b>Tuning Hyperparameter</b>;
+    detach
+endif
+
+stop
+@enduml
