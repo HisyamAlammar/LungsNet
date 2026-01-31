@@ -86,7 +86,7 @@ if uploaded_file:
     
     with col1:
         st.subheader("Original X-Ray")
-        st.image(image, use_column_width=True)
+        st.image(image, use_container_width=True)
     
     with col2:
         st.subheader("AI Diagnosis")
@@ -105,13 +105,20 @@ if uploaded_file:
                     # Generic logic to find last 4D layer
                     last_conv_layer = None
                     for layer in reversed(model.layers):
-                        if len(layer.output_shape) == 4:
-                            last_conv_layer = layer.name
-                            break
+                        try:
+                            # Fix for Keras/TF versions where output_shape attribute is missing on some layers
+                            # We check for 4D output (batch, height, width, channels)
+                            output_shape = layer.output.shape
+                            if len(output_shape) == 4:
+                                last_conv_layer = layer.name
+                                break
+                        except AttributeError:
+                            # Skip layers that don't have output attribute (e.g. input layers sometimes)
+                            continue
                     
                     heatmap = make_gradcam_heatmap(img_array, model, last_conv_layer)
                     gradcam_img = display_gradcam(image, heatmap)
-                    st.image(gradcam_img, caption="Grad-CAM Heatmap (Red = Infected Area)", use_column_width=True)
+                    st.image(gradcam_img, caption="Grad-CAM Heatmap (Red = Infected Area)", use_container_width=True)
                 except Exception as e:
                     st.warning(f"Could not generate Grad-CAM: {e}")
 
